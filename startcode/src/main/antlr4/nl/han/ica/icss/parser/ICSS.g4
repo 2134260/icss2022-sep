@@ -46,14 +46,29 @@ SIZE_PROPERTIES: 'width' COLON | 'height' COLON;
 
 
 //--- PARSER: ---
-stylesheet: (variable | property)+;
+stylesheet: (variable_assignment | stylerule)+;
 
-variable: CAPITAL_IDENT ASSIGNMENT_OPERATOR (size_types | COLOR | boolean) SEMICOLON;
-identifier: ID_IDENT | CLASS_IDENT | LOWER_IDENT | CAPITAL_IDENT;
+variable_assignment: variable_reference ASSIGNMENT_OPERATOR literals SEMICOLON;
+id_selector: ID_IDENT;
+class_selector: CLASS_IDENT;
+tag_selector: LOWER_IDENT;
+selector: id_selector | class_selector | tag_selector;
+variable_reference: CAPITAL_IDENT;
 
-size_types: SCALAR | PIXELSIZE | PERCENTAGE;
-boolean: TRUE | FALSE;
+literals: size_literal | bool_literal | color_literal;
+size_literal: scalar_literal | pixel_literal | percentage_literal;
+scalar_literal: SCALAR;
+pixel_literal: PIXELSIZE;
+percentage_literal: PERCENTAGE;
+bool_literal: TRUE | FALSE;
+color_literal: COLOR;
 
-property: identifier OPEN_BRACE (color_declaration | size_declaration)* CLOSE_BRACE;
-size_declaration: SIZE_PROPERTIES (size_types | variable) SEMICOLON;
-color_declaration: COLOR_PROPERTIES (COLOR | variable) SEMICOLON;
+stylerule: selector OPEN_BRACE (color_declaration | size_declaration)* CLOSE_BRACE;
+
+size_declaration: SIZE_PROPERTIES (size_literal | variable_reference) SEMICOLON;
+color_declaration: COLOR_PROPERTIES (color_literal | variable_reference) SEMICOLON;
+
+//id_selector: ID_IDENT;
+//declaration: property COLON pixel_literal SEMICOLON;
+//property: LOWER_IDENT;
+//pixel_literal: PIXELSIZE;
