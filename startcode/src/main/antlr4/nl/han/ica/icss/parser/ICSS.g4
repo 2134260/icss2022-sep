@@ -63,12 +63,17 @@ percentage_literal: PERCENTAGE;
 bool_literal: TRUE | FALSE;
 color_literal: COLOR;
 
-stylerule: selector OPEN_BRACE (color_declaration | size_declaration)* CLOSE_BRACE;
+stylerule: selector OPEN_BRACE declaration* CLOSE_BRACE;
 
-size_declaration: SIZE_PROPERTIES (size_literal | variable_reference) SEMICOLON;
-color_declaration: COLOR_PROPERTIES (color_literal | variable_reference) SEMICOLON;
+declaration: color_declaration | size_declaration;
+size_declaration: size_property (size_literal | variable_reference | expression) SEMICOLON;
+color_declaration: color_property (color_literal | variable_reference | expression) SEMICOLON;
 
-//id_selector: ID_IDENT;
-//declaration: property COLON pixel_literal SEMICOLON;
-//property: LOWER_IDENT;
-//pixel_literal: PIXELSIZE;
+color_property: COLOR_PROPERTIES;
+size_property: SIZE_PROPERTIES;
+
+// maak een rule om een wiskundige formule uit te kunnen voeren in een declaration check de notepad *wink wink nudge nudge*
+expression: (size_literal | variable_reference) (add | minus | multiply)+;
+add: (PLUS size_literal)+;
+minus:  (MIN size_literal)+;
+multiply:  (MUL size_literal)+;

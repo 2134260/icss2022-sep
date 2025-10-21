@@ -13,6 +13,7 @@ import nl.han.ica.icss.ast.operations.SubtractOperation;
 import nl.han.ica.icss.ast.selectors.ClassSelector;
 import nl.han.ica.icss.ast.selectors.IdSelector;
 import nl.han.ica.icss.ast.selectors.TagSelector;
+import org.checkerframework.checker.units.qual.C;
 
 /**
  * This class extracts the ICSS Abstract Syntax Tree from the Antlr Parse tree.
@@ -91,5 +92,125 @@ public class ASTListener extends ICSSBaseListener {
 	public void exitTag_selector(ICSSParser.Tag_selectorContext ctx) {
 		TagSelector selector = (TagSelector) currentContainer.pop();
 		currentContainer.peek().addChild(selector);
+	}
+
+//	@Override
+//	public void enterDeclaration(ICSSParser.DeclarationContext ctx) {
+//		Declaration declaration = new Declaration();
+//		currentContainer.push(declaration);
+//	}
+//
+//	@Override
+//	public void exitDeclaration(ICSSParser.DeclarationContext ctx) {
+//		Declaration declaration = (Declaration) currentContainer.pop();
+//		currentContainer.peek().addChild(declaration);
+//	}
+
+	@Override
+	public void enterColor_declaration(ICSSParser.Color_declarationContext ctx) {
+		Declaration declaration = new Declaration(ctx.getText());
+		currentContainer.push(declaration);
+	}
+
+	@Override
+	public void exitColor_declaration(ICSSParser.Color_declarationContext ctx) {
+		Declaration declaration = (Declaration) currentContainer.pop();
+		currentContainer.peek().addChild(declaration);
+	}
+
+	@Override
+	public void enterSize_declaration(ICSSParser.Size_declarationContext ctx) {
+		Declaration declaration = new Declaration(ctx.getText());
+		currentContainer.push(declaration);
+	}
+
+	@Override
+	public void exitSize_declaration(ICSSParser.Size_declarationContext ctx) {
+		Declaration declaration = (Declaration) currentContainer.pop();
+		currentContainer.peek().addChild(declaration);
+	}
+
+	@Override
+	public void enterScalar_literal(ICSSParser.Scalar_literalContext ctx) {
+		ScalarLiteral literal = new ScalarLiteral(ctx.getText());
+		currentContainer.push(literal);
+	}
+
+	@Override
+	public void exitScalar_literal(ICSSParser.Scalar_literalContext ctx) {
+		ScalarLiteral literal = (ScalarLiteral) currentContainer.pop();
+		currentContainer.peek().addChild(literal);
+	}
+
+	@Override
+	public void enterPercentage_literal(ICSSParser.Percentage_literalContext ctx) {
+		PercentageLiteral literal = new PercentageLiteral(ctx.getText());
+		currentContainer.push(literal);
+	}
+
+	@Override
+	public void exitPercentage_literal(ICSSParser.Percentage_literalContext ctx) {
+		PercentageLiteral literal = (PercentageLiteral) currentContainer.pop();
+		currentContainer.peek().addChild(literal);
+	}
+
+	@Override
+	public void enterPixel_literal(ICSSParser.Pixel_literalContext ctx) {
+		PixelLiteral literal = new PixelLiteral(ctx.getText());
+		currentContainer.push(literal);
+	}
+
+	@Override
+	public void exitPixel_literal(ICSSParser.Pixel_literalContext ctx) {
+		PixelLiteral literal = (PixelLiteral) currentContainer.pop();
+		currentContainer.peek().addChild(literal);
+	}
+
+	@Override
+	public void enterBool_literal(ICSSParser.Bool_literalContext ctx) {
+		BoolLiteral literal = new BoolLiteral(ctx.getText());
+		currentContainer.push(literal);
+	}
+
+	@Override
+	public void exitBool_literal(ICSSParser.Bool_literalContext ctx) {
+		BoolLiteral literal = (BoolLiteral) currentContainer.pop();
+		currentContainer.peek().addChild(literal);
+	}
+
+	@Override
+	public void enterColor_literal(ICSSParser.Color_literalContext ctx) {
+		ColorLiteral literal = new ColorLiteral(ctx.getText());
+		currentContainer.push(literal);
+	}
+
+	@Override
+	public void exitColor_literal(ICSSParser.Color_literalContext ctx) {
+		ColorLiteral literal = (ColorLiteral) currentContainer.pop();
+		currentContainer.peek().addChild(literal);
+	}
+
+	@Override
+	public void enterColor_property(ICSSParser.Color_propertyContext ctx) {
+		PropertyName prop = new PropertyName(ctx.getText());
+		currentContainer.push(prop);
+	}
+
+	@Override
+	public void exitColor_property(ICSSParser.Color_propertyContext ctx) {
+		PropertyName prop = (PropertyName) currentContainer.pop();
+		currentContainer.peek().addChild(prop);
+	}
+
+	@Override
+	public void enterSize_property(ICSSParser.Size_propertyContext ctx) {
+		PropertyName prop = new PropertyName(ctx.getText());
+		currentContainer.push(prop);
+	}
+
+	@Override
+	public void exitSize_property(ICSSParser.Size_propertyContext ctx) {
+		PropertyName prop = (PropertyName) currentContainer.pop();
+		currentContainer.peek().addChild(prop);
 	}
 }
