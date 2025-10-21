@@ -63,7 +63,7 @@ percentage_literal: PERCENTAGE;
 bool_literal: TRUE | FALSE;
 color_literal: COLOR;
 
-stylerule: selector OPEN_BRACE declaration* CLOSE_BRACE;
+stylerule: selector OPEN_BRACE (declaration | if_statement)* CLOSE_BRACE;
 
 declaration: color_declaration | size_declaration;
 size_declaration: size_property (size_literal | variable_reference | expression) SEMICOLON;
@@ -77,3 +77,13 @@ expression: (size_literal | variable_reference) (add | minus | multiply)+;
 add: (PLUS size_literal)+;
 minus:  (MIN size_literal)+;
 multiply:  (MUL size_literal)+;
+
+// if statement
+if_statement: if OPEN_BRACE (declaration | if_statement)* CLOSE_BRACE else?;
+if: IF BOX_BRACKET_OPEN (bool_literal | variable_reference) BOX_BRACKET_CLOSE;
+else: ELSE OPEN_BRACE (declaration | if_statement)* CLOSE_BRACE;
+
+//IF: 'if';
+//ELSE: 'else';
+//BOX_BRACKET_OPEN: '[';
+//BOX_BRACKET_CLOSE: ']';
