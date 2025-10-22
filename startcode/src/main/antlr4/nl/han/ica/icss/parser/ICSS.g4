@@ -73,10 +73,8 @@ color_property: COLOR_PROPERTIES;
 size_property: SIZE_PROPERTIES;
 
 // maak een rule om een wiskundige formule uit te kunnen voeren in een declaration check de notepad *wink wink nudge nudge*
-expression: (size_literal | variable_reference) (add | minus | multiply)+;
-add: (PLUS size_literal)+;
-minus:  (MIN size_literal)+;
-multiply:  (MUL size_literal)+;
+expression: expression (PLUS | MIN) expression | (size_literal | variable_reference | mul_expression);
+mul_expression: (size_literal | variable_reference) MUL (size_literal | variable_reference);
 
 // if statement
 if_statement: if OPEN_BRACE (declaration | if_statement)* CLOSE_BRACE else?;
