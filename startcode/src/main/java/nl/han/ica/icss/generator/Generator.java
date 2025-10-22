@@ -16,6 +16,7 @@ public class Generator {
 				return generateStylerule((Stylerule) child);
 			}
 		}
+		return "SOMETHING WENT WRONG IN STYLESHEET";
 	}
 
 	private String generateStylerule(Stylerule node) { // moet nog uitgebreid worden is momenteel maar een
@@ -29,6 +30,6 @@ public class Generator {
     }
 
 	private String generateDeclaration(Declaration node) {
-
+		return "SOMETHING WENT WRONG IN DECLARATION";
 	}
 }

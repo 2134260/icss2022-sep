@@ -3,6 +3,7 @@ package nl.han.ica.icss.parser;
 import java.util.Stack;
 
 
+import com.google.errorprone.annotations.Var;
 import nl.han.ica.datastructures.HANStack;
 import nl.han.ica.datastructures.IHANStack;
 import nl.han.ica.icss.ast.*;
@@ -13,6 +14,7 @@ import nl.han.ica.icss.ast.operations.SubtractOperation;
 import nl.han.ica.icss.ast.selectors.ClassSelector;
 import nl.han.ica.icss.ast.selectors.IdSelector;
 import nl.han.ica.icss.ast.selectors.TagSelector;
+import org.checkerframework.checker.units.qual.A;
 import org.checkerframework.checker.units.qual.C;
 
 /**
@@ -212,5 +214,93 @@ public class ASTListener extends ICSSBaseListener {
 	public void exitSize_property(ICSSParser.Size_propertyContext ctx) {
 		PropertyName prop = (PropertyName) currentContainer.pop();
 		currentContainer.peek().addChild(prop);
+	}
+
+	@Override
+	public void enterVariable_assignment(ICSSParser.Variable_assignmentContext ctx) {
+		VariableAssignment variableAssignment = new VariableAssignment();
+		currentContainer.push(variableAssignment);
+	}
+
+	@Override
+	public void exitVariable_assignment(ICSSParser.Variable_assignmentContext ctx) {
+		VariableAssignment variableAssignment = (VariableAssignment) currentContainer.pop();
+		currentContainer.peek().addChild(variableAssignment);
+	}
+
+	@Override
+	public void enterVariable_reference(ICSSParser.Variable_referenceContext ctx) {
+		VariableReference variableReference = new VariableReference(ctx.getText());
+		currentContainer.push(variableReference);
+	}
+
+	@Override
+	public void exitVariable_reference(ICSSParser.Variable_referenceContext ctx) {
+		VariableReference variableReference = (VariableReference) currentContainer.pop();
+		currentContainer.peek().addChild(variableReference);
+	}
+
+	@Override
+	public void enterExpression(ICSSParser.ExpressionContext ctx) {
+		if(ctx.getChildCount() == 3){
+			if(ctx.getChild(1).getText().equals("+")){
+				AddOperation addOperation = new AddOperation();
+				currentContainer.push(addOperation);
+			}
+			if(ctx.getChild(1).getText().equals("-")){
+				SubtractOperation subtractOperation = new SubtractOperation();
+				currentContainer.push(subtractOperation);
+			}
+		}
+	}
+
+	@Override
+	public void exitExpression(ICSSParser.ExpressionContext ctx) {
+		if(ctx.getChildCount() == 3){
+			if(ctx.getChild(1).getText().equals("+")){
+				AddOperation addOperation = (AddOperation) currentContainer.pop();
+				currentContainer.peek().addChild(addOperation);
+			}
+			if(ctx.getChild(1).getText().equals("-")){
+				SubtractOperation subtractOperation = (SubtractOperation) currentContainer.pop();
+				currentContainer.peek().addChild(subtractOperation);
+			}
+		}
+	}
+
+	@Override
+	public void enterMul_expression(ICSSParser.Mul_expressionContext ctx) {
+		MultiplyOperation multiplyOperation = new MultiplyOperation();
+		currentContainer.push(multiplyOperation);
+	}
+
+	@Override
+	public void exitMul_expression(ICSSParser.Mul_expressionContext ctx) {
+		MultiplyOperation multiplyOperation = (MultiplyOperation) currentContainer.pop();
+		currentContainer.peek().addChild(multiplyOperation);
+	}
+
+	@Override
+	public void enterIf_clause(ICSSParser.If_clauseContext ctx) {
+		IfClause ifClause = new IfClause();
+		currentContainer.push(ifClause);
+	}
+
+	@Override
+	public void exitIf_clause(ICSSParser.If_clauseContext ctx) {
+		IfClause ifClause = (IfClause) currentContainer.pop();
+		currentContainer.peek().addChild(ifClause);
+	}
+
+	@Override
+	public void enterElse_clause(ICSSParser.Else_clauseContext ctx) {
+		ElseClause elseClause = new ElseClause();
+		currentContainer.push(elseClause);
+	}
+
+	@Override
+	public void exitElse_clause(ICSSParser.Else_clauseContext ctx) {
+		ElseClause elseClause = (ElseClause) currentContainer.pop();
+		currentContainer.peek().addChild(elseClause);
 	}
 }
