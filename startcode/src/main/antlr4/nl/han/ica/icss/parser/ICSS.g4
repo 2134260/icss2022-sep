@@ -77,9 +77,9 @@ expression: expression (PLUS | MIN) expression | (size_literal | variable_refere
 mul_expression: (size_literal | variable_reference) MUL (size_literal | variable_reference);
 
 // if statement
-if_statement: if OPEN_BRACE (declaration | if_statement)* CLOSE_BRACE else?;
+if_statement: if OPEN_BRACE (declaration | if_statement | variable_assignment)* CLOSE_BRACE else?;
 if: IF BOX_BRACKET_OPEN (bool_literal | variable_reference) BOX_BRACKET_CLOSE;
-else: ELSE OPEN_BRACE (declaration | if_statement)* CLOSE_BRACE;
+else: ELSE OPEN_BRACE (declaration | if_statement | variable_assignment)* CLOSE_BRACE;
 
 //IF: 'if';
 //ELSE: 'else';
